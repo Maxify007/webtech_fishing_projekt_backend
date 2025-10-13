@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fishing.main.iml" filepath="$PROJECT_DIR$/.idea/modules/fishing.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/webtech_fishing_projekt_backend.iml" filepath="$PROJECT_DIR$/.idea/webtech_fishing_projekt_backend.iml" />
     </modules>
   </component>
