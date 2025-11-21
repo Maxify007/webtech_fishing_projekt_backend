@@ -6,7 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface FisherRepository extends JpaRepository<Fisher, Long> {
-
-    // Later: multiple save files per player
     List<Fisher> findByPlayerId(Long playerId);
 }

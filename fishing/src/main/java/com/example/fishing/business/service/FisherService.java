@@ -17,8 +17,8 @@ public class FisherService {
         return fisherRepository.findByPlayerId(playerId);
     }
 
-    public Fisher createFisher(long fisherId, long playerId, String name) {
-        Fisher fisher = new Fisher(fisherId, playerId, name);
+    public Fisher createFisher(long playerId, String name) {
+        Fisher fisher = new Fisher(playerId, name);
         return fisherRepository.save(fisher);
     }
 

@@ -12,7 +12,7 @@ class FisherTest {
 
     @Test
     void constructor_initializesDefaults() {
-        Fisher fisher = new Fisher(1L, 1L, "TestFisher");
+        Fisher fisher = new Fisher(1L, "TestFisher");
 
         assertEquals(1L, fisher.getFisherId());
         assertEquals(1L, fisher.getPlayerId());
@@ -30,7 +30,7 @@ class FisherTest {
 
     @Test
     void recalculateStats_usesUpgradeLevels() {
-        Fisher fisher = new Fisher(1L, 1L, "TestFisher");
+        Fisher fisher = new Fisher(1L, "TestFisher");
 
         // Directly set some specific levels
         fisher.getUpgrades().stream()
@@ -77,7 +77,7 @@ class FisherTest {
 
     @Test
     void increaseLevelOf_incrementsUpgradeLevel() {
-        Fisher fisher = new Fisher(1L, 1L, "TestFisher");
+        Fisher fisher = new Fisher(1L, "TestFisher");
 
         int initialLevel = fisher.getLevelOf(UpgradeType.CLICK_FLAT);
         fisher.increaseLevelOf(UpgradeType.CLICK_FLAT);
@@ -88,7 +88,7 @@ class FisherTest {
 
     @Test
     void calculatePull_withoutLuck_usesBaseAndMasteryOnly() {
-        Fisher fisher = new Fisher(1L, 1L, "TestFisher");
+        Fisher fisher = new Fisher(1L, "TestFisher");
 
         // Make stats deterministic:
         // CLICK_FLAT = 10
@@ -119,12 +119,12 @@ class FisherTest {
         long expected = Math.max(1L, Math.round(base * mastery));
         long actual = fisher.calculatePull();
 
-        assertEquals(expected, actual);
+         assertEquals(expected, actual);
     }
 
     @Test
     void calculatePull_withAlwaysLuckyPull_appliesLuckAndMastery() {
-        Fisher fisher = new Fisher(1L, 1L, "TestFisher");
+        Fisher fisher = new Fisher(1L, "TestFisher");
 
         // CLICK_FLAT = 10
         fisher.getUpgrades().stream()
@@ -160,7 +160,7 @@ class FisherTest {
 
     @Test
     void fishingAction_requiresTenStepsBeforePullIsAdded() {
-        Fisher fisher = new Fisher(1L, 1L, "TestFisher");
+        Fisher fisher = new Fisher(1L, "TestFisher");
 
         // make pulls deterministic and >=1
         fisher.getUpgrades().stream()

@@ -1,34 +1,44 @@
 package com.example.fishing.rest.model;
 
-import com.example.fishing.business.service.GameEngine;
-import com.example.fishing.business.service.UpgradeType;
 import com.example.fishing.persistence.entity.Fisher;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import com.example.fishing.persistence.entity.FisherRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/game")
-@CrossOrigin(origins = "http://localhost:5177")
-@Service
+@RequestMapping("/api/fishers")
 public class FisherController {
 
-    private final GameEngine gameEngine;
+    private final FisherRepository fisherRepository;
 
-    public FisherController(GameEngine gameEngine) {
-        this.gameEngine = gameEngine;
+    public FisherController(FisherRepository fisherRepository) {
+        this.fisherRepository = fisherRepository;
     }
 
-    // POST /api/game/{fisherId}/click
-    @PostMapping("/{fisherId}/click")
-    public Fisher click(@PathVariable long fisherId) {
-        return gameEngine.click(fisherId);
+    // GET /api/fishers?playerId=1
+    @GetMapping
+    public List<Fisher> listFishers(@RequestParam long playerId) {
+        return fisherRepository.findByPlayerId(playerId);
     }
 
-    // POST /api/game/{fisherId}/upgrade/{type}
-    @PostMapping("/{fisherId}/upgrade/{type}")
-    public Fisher buyUpgrade(@PathVariable long fisherId,
-                             @PathVariable UpgradeType type) {
-        return gameEngine.buyUpgrade(fisherId, type);
+    // POST /api/fishers
+    @PostMapping
+    public Fisher createFisher(@RequestBody CreateFisherRequest req) {
+        Fisher fisher = new Fisher(req.playerId(), req.name());
+        return fisherRepository.save(fisher);
+    }
+
+    // GET /api/fishers/{fisherId}?playerId=1
+    @GetMapping("/{fisherId}")
+    public Fisher getFisher(@PathVariable long fisherId,
+                            @RequestParam long playerId) {
+        Fisher fisher = fisherRepository.findById(fisherId)
+                .orElseThrow(() -> new IllegalArgumentException("Fisher not found"));
+
+        if (fisher.getPlayerId() != playerId) {
+            throw new IllegalStateException("Not your Fisher");
+        }
+        return fisher;
     }
 }

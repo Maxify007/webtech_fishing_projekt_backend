@@ -3,7 +3,7 @@ package com.example.fishing.persistence.entity;
 import com.example.fishing.business.service.Upgrade;
 import com.example.fishing.business.service.UpgradeFormula;
 import com.example.fishing.business.service.UpgradeType;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,10 +14,16 @@ import java.util.Random;
 @Setter
 @Getter
 @Entity
+@Table(name = "fishers")
+
 
 public class Fisher {
-    private long fisherId;
-    private long playerId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment id
+    private Long fisherId;
+
+
+    private Long playerId;
     private String name;
 
     private long fishAmount;
@@ -32,28 +38,26 @@ public class Fisher {
     private double passiveFishSpeedMultiplier;
     private double passiveFishPerPull;
     private double lastPassiveTickMillis;
-
+    @Transient
     private List<Upgrade> upgrades = new ArrayList<>();
     private int fishProgress;
 
     private static final Random RNG = new Random();
 
-public Fisher(long fisherId,long playerId,String name) {
-    this.fisherId = fisherId;
+public Fisher(Long playerId,String name) {
     this.playerId = playerId;
     this.name = name;
     this.fishAmount = 0;
     initUpgrades();
-    this.luckRate = 0;
-    this.luckMultiplier = 0;
-    this.passiveFishSpeedMultiplier = 0;
-    this.passiveFishPerPull = 0;
-    this.masteryMultiplier = 0;
-    this.lastPassiveTickMillis = 0;
+    recalculateStats();
+
+    this.lastPassiveTickMillis = System.currentTimeMillis();
     this.fishProgress = 0;
 }
+    protected Fisher() {}
 
-public void recalculateStats() {
+
+    public void recalculateStats() {
     int clickFlatLevel = getLevelOf(UpgradeType.CLICK_FLAT);
     int luckRateLevel = getLevelOf(UpgradeType.CLICK_LUCK_RATE);
     int luckMultLevel = getLevelOf(UpgradeType.CLICK_LUCK_MULTIPLIER);
