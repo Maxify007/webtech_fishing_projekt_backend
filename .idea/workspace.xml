@@ -5,15 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b74e7de3-9c9e-4f9f-b8a7-5126b8e9a526" name="Changes" comment="Git Pray">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/business/service/FisherService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/persistence/entity/FisherRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/rest/model/FisherController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fishing/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/fishing/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/business/service/GameEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/business/service/GameEngine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/persistence/entity/Fisher.java" beforeDir="false" afterPath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/persistence/entity/Fisher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/rest/model/FisherDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/rest/model/FisherDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_10_2025_17_47__Changes_.xml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,12 +55,12 @@
     &quot;assignee&quot;: &quot;Maxify007&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;git@github.com:Maxify007/webtech_fishing_projekt_backend.git&quot;,
-    &quot;accountId&quot;: &quot;89ad4c49-5ca8-4286-9f2a-a09b12867495&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "git@github.com:Maxify007/webtech_fishing_projekt_backend.git",
+    "accountId": "9fddb1b7-3f56-4489-879c-77f2f5dc1c2b"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 3
@@ -86,9 +78,10 @@
     "Repository.Attach.JavaDocs": "false",
     "Repository.Attach.Sources": "false",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.FishingApplication.executor": "Run",
-    "git-widget-placeholder": "rebuild",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -111,8 +104,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23726.103" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23726.103" />
+        <option value="bundled-jdk-9823dce3aa75-84258761d1cc-intellij.indexing.shared.core-IU-243.28141.18" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.28141.18" />
       </set>
     </attachedChunks>
   </component>
@@ -125,6 +118,7 @@
       <option name="presentableId" value="Default" />
       <updated>1760370100130</updated>
       <workItem from="1760370102282" duration="508000" />
+      <workItem from="1763750548536" duration="20000" />
     </task>
     <task id="LOCAL-00001" summary="Correction Commit">
       <option name="closed" value="true" />
