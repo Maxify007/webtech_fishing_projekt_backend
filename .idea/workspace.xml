@@ -5,9 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b74e7de3-9c9e-4f9f-b8a7-5126b8e9a526" name="Changes" comment="Git Pray">
-      <change afterPath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/persistence/entity/Fisher.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/rest/model/FisherDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/business/service/FisherService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/persistence/entity/FisherRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/rest/model/FisherController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fishing/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/fishing/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/business/service/GameEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/business/service/GameEngine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/persistence/entity/Fisher.java" beforeDir="false" afterPath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/persistence/entity/Fisher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/rest/model/FisherDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/rest/model/FisherDTO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,21 +78,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Gradle.Build fishing.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;Spring Boot.FishingApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
+    "Gradle.Build fishing.executor": "Run",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.FishingApplication.executor": "Run",
+    "git-widget-placeholder": "rebuild",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="FishingApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />

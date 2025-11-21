@@ -3,6 +3,7 @@ package com.example.fishing.persistence.entity;
 import com.example.fishing.business.service.Upgrade;
 import com.example.fishing.business.service.UpgradeFormula;
 import com.example.fishing.business.service.UpgradeType;
+import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +13,8 @@ import java.util.List;
 import java.util.Random;
 @Setter
 @Getter
+@Entity
+
 public class Fisher {
     private long fisherId;
     private long playerId;
