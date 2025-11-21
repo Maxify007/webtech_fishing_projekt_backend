@@ -2,9 +2,10 @@
 # Build stage
 #
 FROM gradle:9-jdk25 AS build
-COPY --chown=gradle:gradle . /home/gradle/src
+COPY --chown=gradle:gradle fishing/ /home/gradle/src
 WORKDIR /home/gradle/src
 RUN gradle build --no-daemon
+
 #
 # Package stage
 #
