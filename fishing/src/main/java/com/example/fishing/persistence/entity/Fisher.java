@@ -48,11 +48,11 @@ public Fisher(Long playerId,String name) {
     this.playerId = playerId;
     this.name = name;
     this.fishAmount = 0;
+    this.fishProgress = 1;
     initUpgrades();
     recalculateStats();
 
     this.lastPassiveTickMillis = System.currentTimeMillis();
-    this.fishProgress = 0;
 }
     protected Fisher() {}
 
@@ -90,11 +90,16 @@ public int getLevelOf(UpgradeType type) {
 }
 
 public void increaseLevelOf(UpgradeType type) {
-    upgrades.stream()
-            .filter(upgrade -> upgrade.getType() == type)
-            .findFirst()
-            .ifPresent(upgrade -> upgrade.setLevel(upgrade.getLevel() + 1));
-    recalculateStats();
+    long rounded = Math.round(Math.pow(1.15, getLevelOf(type)));
+    long upgradeCost = 10 * rounded;
+    if (fishAmount >= upgradeCost) {
+        upgrades.stream()
+                .filter(upgrade -> upgrade.getType() == type)
+                .findFirst()
+                .ifPresent(upgrade -> upgrade.setLevel(upgrade.getLevel() + 1));
+        recalculateStats();
+        fishAmount -= upgradeCost;
+    }
 }
 public long calculatePull(){
     double pull = this.baseFishPull;
@@ -114,7 +119,7 @@ public long calculatePull(){
 public void fishingAction(){
     if (fishProgress == 10){
         fishAmount = fishAmount + calculatePull();
-        fishProgress = 0;
+        fishProgress = 1;
     } else {
         fishProgress++;
     }
