@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b74e7de3-9c9e-4f9f-b8a7-5126b8e9a526" name="Changes" comment="Git Pray">
+    <list default="true" id="b74e7de3-9c9e-4f9f-b8a7-5126b8e9a526" name="Changes" comment="Upgrade">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/business/service/GameEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/business/service/GameEngine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/persistence/entity/Fisher.java" beforeDir="false" afterPath="$PROJECT_DIR$/fishing/src/main/java/com/example/fishing/persistence/entity/Fisher.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,12 +57,12 @@
     &quot;assignee&quot;: &quot;Maxify007&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "git@github.com:Maxify007/webtech_fishing_projekt_backend.git",
-    "accountId": "9fddb1b7-3f56-4489-879c-77f2f5dc1c2b"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:Maxify007/webtech_fishing_projekt_backend.git&quot;,
+    &quot;accountId&quot;: &quot;9fddb1b7-3f56-4489-879c-77f2f5dc1c2b&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 3
@@ -81,7 +83,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.FishingApplication.executor": "Run",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "upgrade",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -118,7 +120,9 @@
       <option name="presentableId" value="Default" />
       <updated>1760370100130</updated>
       <workItem from="1760370102282" duration="508000" />
-      <workItem from="1763750548536" duration="635000" />
+      <workItem from="1763750548536" duration="4172000" />
+      <workItem from="1763987012541" duration="767000" />
+      <workItem from="1764001499839" duration="2417000" />
     </task>
     <task id="LOCAL-00001" summary="Correction Commit">
       <option name="closed" value="true" />
@@ -160,7 +164,39 @@
       <option name="project" value="LOCAL" />
       <updated>1763750871089</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Git Pray">
+      <option name="closed" value="true" />
+      <created>1763752366688</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1763752366688</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Git Pray">
+      <option name="closed" value="true" />
+      <created>1763752900370</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1763752900370</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Upgrade">
+      <option name="closed" value="true" />
+      <created>1764002925752</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1764002925752</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Upgrade">
+      <option name="closed" value="true" />
+      <created>1764002998960</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1764002998960</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -180,6 +216,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Correction Commit" />
     <MESSAGE value="Git Pray" />
-    <option name="LAST_COMMIT_MESSAGE" value="Git Pray" />
+    <MESSAGE value="Upgrade" />
+    <option name="LAST_COMMIT_MESSAGE" value="Upgrade" />
   </component>
 </project>
