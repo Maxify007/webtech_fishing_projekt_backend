@@ -21,10 +21,14 @@ public class GameEngine {
     }
 
     public Fisher buyUpgrade(long fisherId, UpgradeType upgradeType) {
-        Fisher fisher = fisherRepository.findById(fisherId).orElseThrow(() -> new IllegalArgumentException("Fisher not found"));
+        Fisher fisher = fisherRepository.findById(fisherId)
+                .orElseThrow(() -> new IllegalArgumentException("Fisher not found"));
+
         fisher.increaseLevelOf(upgradeType);
         fisherRepository.save(fisher);
-        return fisher;
+
+        return fisher; // now includes upgrades
     }
+
 
 }

@@ -62,6 +62,12 @@ public Fisher(Long playerId,String name) {
             recalculateStats();
         }
     }
+    private void ensureUpgradesInitialized() {
+        if (upgrades == null || upgrades.isEmpty()) {
+            initUpgrades();
+            recalculateStats();
+        }
+    }
 
     public void recalculateStats() {
     int clickFlatLevel = getLevelOf(UpgradeType.CLICK_FLAT);
@@ -89,6 +95,7 @@ public final void initUpgrades(){
     }
 }
 public int getLevelOf(UpgradeType type) {
+    ensureUpgradesInitialized();
     return upgrades.stream().filter(upgrade -> upgrade.getType() == type)
             .map(Upgrade::getLevel)
             .findFirst()
@@ -97,6 +104,7 @@ public int getLevelOf(UpgradeType type) {
 
 
 public void increaseLevelOf(UpgradeType type) {
+    ensureUpgradesInitialized();
     long rounded = Math.round(Math.pow(1.15, getLevelOf(type)));
     long upgradeCost = 10 * rounded;
     if (fishAmount >= upgradeCost) {
@@ -104,8 +112,9 @@ public void increaseLevelOf(UpgradeType type) {
                 .filter(upgrade -> upgrade.getType() == type)
                 .findFirst()
                 .ifPresent(upgrade -> upgrade.setLevel(upgrade.getLevel() + 1));
-        recalculateStats();
+
         fishAmount -= upgradeCost;
+        recalculateStats();
     }
 }
 public long calculatePull(){
