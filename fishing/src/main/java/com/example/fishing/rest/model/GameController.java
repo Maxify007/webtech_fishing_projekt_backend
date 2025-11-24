@@ -26,8 +26,9 @@ public class GameController {
     // POST /api/game/{fisherId}/upgrade/{type}
     @PostMapping("/{fisherId}/upgrade/{type}")
     public Fisher buyUpgrade(@PathVariable long fisherId,
-                             @PathVariable UpgradeType type) {
-        return gameEngine.buyUpgrade(fisherId, type);
+                             @PathVariable UpgradeType type,
+                             @PathVariable long fishAmount) {
+        return gameEngine.buyUpgrade(fisherId, type, fishAmount);
     }
 
     private Map<String, Object> buildFisherResponse(Fisher fisher) {

@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import static org.antlr.v4.runtime.misc.Utils.count;
+
 @Setter
 @Getter
 @Entity
@@ -110,10 +112,20 @@ public class Fisher {
         return upgradeLevels.getOrDefault(type, 0);
     }
 
+    public void decreaseFishAmount(long subtractAmount) {
+        fishAmount -= subtractAmount;
+    }
+
     public void increaseLevelOf(UpgradeType type) {
         // (you removed cost checks earlier; keeping your current logic)
         upgradeLevels.put(type, getLevelOf(type) + 1);
         recalculateStats();
+    }
+
+    public long getUpgradeCost(UpgradeType type) {
+        long rounded = Math.round(Math.pow(1.15, getLevelOf(type)));
+        long upgradeCost = 10 * rounded;
+        return upgradeCost;
     }
 
     public void recalculateStats() {
