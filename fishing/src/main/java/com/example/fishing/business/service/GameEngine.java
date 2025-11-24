@@ -27,4 +27,13 @@ public class GameEngine {
         return fisher;
     }
 
+    public Fisher passiveTick(long fisherId) {
+        Fisher fisher = fisherRepository.findById(fisherId)
+                .orElseThrow(() -> new IllegalArgumentException("Fisher not found"));
+        fisher.passiveFishingTick();
+        fisherRepository.save(fisher);
+        return fisher;
+    }
+
+
 }

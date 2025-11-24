@@ -1,5 +1,6 @@
 package com.example.fishing.rest.model;
 
+import com.example.fishing.business.service.UpgradeType;
 import com.example.fishing.persistence.entity.Fisher;
 import com.example.fishing.persistence.entity.FisherRepository;
 import org.springframework.web.bind.annotation.*;

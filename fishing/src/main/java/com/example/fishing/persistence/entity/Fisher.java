@@ -37,7 +37,7 @@ public class Fisher {
 
     private double passiveFishSpeedMultiplier;
     private double passiveFishPerPull;
-    private double lastPassiveTickMillis;
+    private long lastPassiveTickMillis;
     @Transient
     private List<Upgrade> upgrades = new ArrayList<>();
     private int fishProgress;
@@ -48,14 +48,20 @@ public Fisher(Long playerId,String name) {
     this.playerId = playerId;
     this.name = name;
     this.fishAmount = 0;
+    this.fishProgress = 1;
     initUpgrades();
     recalculateStats();
 
     this.lastPassiveTickMillis = System.currentTimeMillis();
-    this.fishProgress = 0;
 }
     protected Fisher() {}
-
+    @PostLoad
+    private void onLoad() {
+        if (upgrades == null || upgrades.isEmpty()) {
+            initUpgrades();
+            recalculateStats();
+        }
+    }
 
     public void recalculateStats() {
     int clickFlatLevel = getLevelOf(UpgradeType.CLICK_FLAT);
@@ -89,13 +95,24 @@ public int getLevelOf(UpgradeType type) {
             .orElse(0);
 }
 
-public void increaseLevelOf(UpgradeType type) {
-    upgrades.stream()
-            .filter(upgrade -> upgrade.getType() == type)
-            .findFirst()
-            .ifPresent(upgrade -> upgrade.setLevel(upgrade.getLevel() + 1));
-    recalculateStats();
-}
+    public long getUpgradeCost(UpgradeType type) {
+        long rounded = Math.round(Math.pow(1.15, getLevelOf(type)));
+        long upgradeCost = 10 * rounded;
+        return upgradeCost;
+    }
+
+    public void increaseLevelOf(UpgradeType type) {
+        long upgradeCostAtm = getUpgradeCost(type);
+        if (fishAmount >= upgradeCostAtm) {
+            upgrades.stream()
+                    .filter(upgrade -> upgrade.getType() == type)
+                    .findFirst()
+                    .ifPresent(upgrade -> upgrade.setLevel(upgrade.getLevel() + 1));
+            recalculateStats();
+            fishAmount -= upgradeCostAtm;
+        }
+    }
+
 public long calculatePull(){
     double pull = this.baseFishPull;
     double roll = RNG.nextDouble() * 100;
@@ -114,12 +131,31 @@ public long calculatePull(){
 public void fishingAction(){
     if (fishProgress == 10){
         fishAmount = fishAmount + calculatePull();
-        fishProgress = 0;
+        fishProgress = 1;
     } else {
         fishProgress++;
     }
 }
 
+
+    public void passiveFishingTick() {
+        long now = System.currentTimeMillis();
+        // Zeit seit letztem Tick
+        long elapsed = now - lastPassiveTickMillis;
+        // Dauer eines Ticks in Millisekunden
+        // Level 1  -> 30000ms  (1 Tick alle 30s)
+        // Level 100 -> 3000ms  (1 Tick alle 3s)
+        double tickDuration = passiveFishSpeedMultiplier;
+        // wie viele Ticks sind vergangen?
+        long ticks = (long)(elapsed / tickDuration);
+
+        if (ticks > 0) {
+            long gainedFish = (long)(ticks * passiveFishPerPull);
+            fishAmount += gainedFish;
+            // neuen Timestamp setzen
+            lastPassiveTickMillis += (long)(ticks * tickDuration);
+        }
+    }
 
 }
 
