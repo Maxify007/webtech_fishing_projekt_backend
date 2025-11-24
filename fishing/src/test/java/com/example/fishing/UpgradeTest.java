@@ -1,106 +1,98 @@
 package com.example.fishing;
 
-import com.example.fishing.business.service.UpgradeType;
+import com.example.fishing.business.service.GameEngine;
 import com.example.fishing.persistence.entity.Fisher;
+import com.example.fishing.persistence.entity.FisherRepository;
+import com.example.fishing.business.service.UpgradeType;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UpgradeTest {
 
+    FisherRepository fisherRepository = Mockito.mock(FisherRepository.class);
+    GameEngine gameEngine = new GameEngine(fisherRepository);
+
+    // -----------------------------
+    // TEST 1 – Erfolgreiches Upgrade
+    // -----------------------------
     @Test
-    void testIncreaseLevel_WhenEnoughFish() {
-        // Arrange
-        Fisher fisher = new Fisher(1L, "Tester");
+    void testBuyUpgrade_clickFlat_success() {
 
-        // Startlevel von CLICK_FLAT = 1 (wegen initUpgrades)
-        int oldLevel = fisher.getLevelOf(UpgradeType.CLICK_FLAT);
+        Fisher fisher = new Fisher(1L, "Bob");
+        fisher.setFishAmount(100);                               // genug Fisch
+        long initialLevel = fisher.getLevelOf(UpgradeType.CLICK_FLAT);
+        long cost = fisher.getUpgradeCost(UpgradeType.CLICK_FLAT);
 
-        // Genug Fische geben
-        fisher.setFishAmount(10_000);
+        Mockito.when(fisherRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(fisher));
 
-        // Berechne erwartete Kosten
-        long expectedRounded = Math.round(Math.pow(1.15, oldLevel));
-        long expectedCost = 10 * expectedRounded;
+        Fisher result = gameEngine.buyUpgrade(1L, UpgradeType.CLICK_FLAT, fisher.getFishAmount());
 
-        long oldFishAmount = fisher.getFishAmount();
+        assertEquals(initialLevel + 1, result.getLevelOf(UpgradeType.CLICK_FLAT));
+        assertEquals(100 - cost, result.getFishAmount());
+        Mockito.verify(fisherRepository).save(fisher);
+    }
 
-        // Act
-        fisher.increaseLevelOf(UpgradeType.CLICK_FLAT);
+    // -----------------------------
+    // TEST 2 – Nicht genug Fisch
+    // -----------------------------
+    @Test
+    void testBuyUpgrade_clickFlat_notEnoughFish() {
 
-        // Assert
-        assertEquals(oldLevel + 1,
-                fisher.getLevelOf(UpgradeType.CLICK_FLAT),
-                "Upgrade-Level sollte um 1 steigen");
+        Fisher fisher = new Fisher(1L, "Bob");
+        fisher.setFishAmount(1); // zu wenig
+        long initialLevel = fisher.getLevelOf(UpgradeType.CLICK_FLAT);
 
-        assertEquals(oldFishAmount - expectedCost,
-                fisher.getFishAmount(),
-                "Fischmenge sollte um die Upgrade-Kosten reduziert werden");
+        Mockito.when(fisherRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(fisher));
+
+        Fisher result = gameEngine.buyUpgrade(1L, UpgradeType.CLICK_FLAT, fisher.getFishAmount());
+
+        // Level soll gleich bleiben
+        assertEquals(initialLevel, result.getLevelOf(UpgradeType.CLICK_FLAT));
+
+        // Fisch soll gleich bleiben
+        assertEquals(1, result.getFishAmount());
+
+        // save() DARF NICHT aufgerufen werden
+        Mockito.verify(fisherRepository, Mockito.never()).save(Mockito.any());
     }
 
 
+    // -----------------------------
+    // TEST 3 – Erst fischen → Upgrade → wieder fischen
+    // -----------------------------
     @Test
-    void testIncreaseLevel_WhenNotEnoughFish() {
-        // Arrange
-        Fisher fisher = new Fisher(1L, "Tester");
+    void testClickThenUpgradeThenClickAgain() {
 
-        int oldLevel = fisher.getLevelOf(UpgradeType.CLICK_FLAT);
+        Fisher fisher = new Fisher(1L, "Bob");
 
-        // Zu wenig Fish
-        fisher.setFishAmount(0);
+        // Mock Repository
+        Mockito.when(fisherRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(fisher));
 
-        long oldFishAmount = fisher.getFishAmount();
-
-        // Act
-        fisher.increaseLevelOf(UpgradeType.CLICK_FLAT);
-
-        // Assert
-        assertEquals(oldLevel,
-                fisher.getLevelOf(UpgradeType.CLICK_FLAT),
-                "Upgrade-Level darf NICHT steigen");
-
-        assertEquals(oldFishAmount,
-                fisher.getFishAmount(),
-                "Fischmenge darf NICHT verändert werden");
-    }
-
-
-
-    @Test
-    void fishPerTenClicksBeforeAndAfterUpgrade() {
-        // --- Setup ---
-        Fisher fisher = new Fisher(1L, "TestFisher");
-
-        // Level 1 → baseFishPull = 1
-        // masteryMultiplier = 1
-        // -> 10 clicks => 1 fish
-
-        // --- Act 1: 10 clicks before upgrade ---
+        // ---- 1) Genug klicken, um 1 Fisch zu bekommen ----
         for (int i = 0; i < 10; i++) {
-            fisher.fishingAction();
+            gameEngine.click(1L);
         }
 
-        long fishBefore = fisher.getFishAmount();
-        assertEquals(1, fishBefore,
-                "Mit CLICK_FLAT=1 sollte man pro 10 Clicks genau 1 Fish bekommen.");
+        assertEquals(1, fisher.getFishAmount());
 
-        // --- Upgrade CLICK_FLAT um 1 Level ---
-        // Upgrade kostet 10 * Math.round(pow(1.15, level=1)) = 10 * 1 = 10
-        fisher.setFishAmount(10); // genug Fish für das Upgrade
-        fisher.increaseLevelOf(UpgradeType.CLICK_FLAT);
+        long upgradeCost = fisher.getUpgradeCost(UpgradeType.CLICK_FLAT);
+        fisher.setFishAmount(upgradeCost); // genug Fisch für Upgrade
 
-        assertEquals(2, fisher.getLevelOf(UpgradeType.CLICK_FLAT),
-                "CLICK_FLAT sollte nun Level 2 haben.");
+        // ---- 2) Upgrade kaufen ----
+        gameEngine.buyUpgrade(1L, UpgradeType.CLICK_FLAT, fisher.getFishAmount());
+        assertEquals(2, fisher.getLevelOf(UpgradeType.CLICK_FLAT));
 
-        // Stats neu berechnet → baseFishPull = 2
-
-        // --- Act 2: Wieder 10 clicks ---
+        // ---- 3) Wieder klicken bis neuer Fisch entsteht ----
         for (int i = 0; i < 10; i++) {
-            fisher.fishingAction();
+            gameEngine.click(1L);
         }
 
-        long fishAfter = fisher.getFishAmount();
-        assertEquals(2, fishAfter,
-                "Mit CLICK_FLAT=2 sollte man pro 10 Clicks nun 2 Fish bekommen.");
+        // ---- Ergebnis prüfen ----
+        assertEquals(2, fisher.getFishAmount());
     }
 }
