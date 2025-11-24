@@ -8,26 +8,26 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+
 @Setter
 @Getter
 @Entity
 @Table(name = "fishers")
-
-
 public class Fisher {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment id
-    private Long fisherId;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long fisherId;
 
     private Long playerId;
     private String name;
 
     private long fishAmount;
-
     private long baseFishPull;
 
     private double luckRate;
@@ -38,88 +38,120 @@ public class Fisher {
     private double passiveFishSpeedMultiplier;
     private double passiveFishPerPull;
     private double lastPassiveTickMillis;
-    @Transient
-    private List<Upgrade> upgrades = new ArrayList<>();
+
     private int fishProgress;
 
     private static final Random RNG = new Random();
 
-public Fisher(Long playerId,String name) {
-    this.playerId = playerId;
-    this.name = name;
-    this.fishAmount = 0;
-    initUpgrades();
-    recalculateStats();
+    /**
+     * Persisted upgrade levels:
+     * Creates table fisher_upgrades(fisher_id, type, level)
+     */
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "fisher_upgrades",
+            joinColumns = @JoinColumn(name = "fisher_id")
+    )
+    @MapKeyEnumerated(EnumType.STRING)
+    @MapKeyColumn(name = "type")
+    @Column(name = "level")
+    private Map<UpgradeType, Integer> upgradeLevels =
+            new EnumMap<>(UpgradeType.class);
 
-    this.lastPassiveTickMillis = System.currentTimeMillis();
-    this.fishProgress = 0;
-}
+    /**
+     * Constructor for new fishers
+     */
+    public Fisher(Long playerId, String name) {
+        this.playerId = playerId;
+        this.name = name;
+        this.fishAmount = 0;
+        this.fishProgress = 0;
+        this.lastPassiveTickMillis = System.currentTimeMillis();
+
+        initUpgradeLevels();   // <-- initialize persisted levels
+        recalculateStats();
+    }
+
     protected Fisher() {}
 
+    /**
+     * For OLD fishers already stored before this change:
+     * When JPA loads them and upgradeLevels is empty, seed defaults.
+     */
+    @PostLoad
+    private void onLoad() {
+        if (upgradeLevels == null || upgradeLevels.isEmpty()) {
+            initUpgradeLevels();
+            recalculateStats();
+        }
+    }
+
+    private void initUpgradeLevels() {
+        upgradeLevels.clear();
+        for (UpgradeType type : EnumSet.allOf(UpgradeType.class)) {
+            upgradeLevels.put(type, 1);
+        }
+    }
+
+    /**
+     * Keep frontend contract: return List<Upgrade> even though we store a Map.
+     * This is NOT persisted; it's derived from upgradeLevels.
+     */
+    @Transient
+    public List<Upgrade> getUpgrades() {
+        List<Upgrade> list = new ArrayList<>();
+        for (Map.Entry<UpgradeType, Integer> e : upgradeLevels.entrySet()) {
+            list.add(new Upgrade(e.getKey(), e.getValue()));
+        }
+        return list;
+    }
+
+    public int getLevelOf(UpgradeType type) {
+        return upgradeLevels.getOrDefault(type, 0);
+    }
+
+    public void increaseLevelOf(UpgradeType type) {
+        // (you removed cost checks earlier; keeping your current logic)
+        upgradeLevels.put(type, getLevelOf(type) + 1);
+        recalculateStats();
+    }
 
     public void recalculateStats() {
-    int clickFlatLevel = getLevelOf(UpgradeType.CLICK_FLAT);
-    int luckRateLevel = getLevelOf(UpgradeType.CLICK_LUCK_RATE);
-    int luckMultLevel = getLevelOf(UpgradeType.CLICK_LUCK_MULTIPLIER);
-    int masteryLevel = getLevelOf(UpgradeType.CLICK_MASTERY_MULTIPLIER);
-    int passiveFishSpeedLevel = getLevelOf(UpgradeType.PASSIVE_FISH_RATE);
-    int passiveFishPerPullLevel = getLevelOf(UpgradeType.PASSIVE_FISH_AMOUNT);
+        int clickFlatLevel = getLevelOf(UpgradeType.CLICK_FLAT);
+        int luckRateLevel = getLevelOf(UpgradeType.CLICK_LUCK_RATE);
+        int luckMultLevel = getLevelOf(UpgradeType.CLICK_LUCK_MULTIPLIER);
+        int masteryLevel = getLevelOf(UpgradeType.CLICK_MASTERY_MULTIPLIER);
+        int passiveFishSpeedLevel = getLevelOf(UpgradeType.PASSIVE_FISH_RATE);
+        int passiveFishPerPullLevel = getLevelOf(UpgradeType.PASSIVE_FISH_AMOUNT);
 
-    // base click stats
-    this.baseFishPull    = UpgradeFormula.flatPerClick(clickFlatLevel);
-    this.luckRate        = UpgradeFormula.luckRate(luckRateLevel);
-    this.luckMultiplier  = UpgradeFormula.luckMultiplier(luckMultLevel);
-    this.masteryMultiplier = UpgradeFormula.masteryMultiplier(masteryLevel);
+        this.baseFishPull = UpgradeFormula.flatPerClick(clickFlatLevel);
+        this.luckRate = UpgradeFormula.luckRate(luckRateLevel);
+        this.luckMultiplier = UpgradeFormula.luckMultiplier(luckMultLevel);
+        this.masteryMultiplier = UpgradeFormula.masteryMultiplier(masteryLevel);
 
-    // passive fishing stats
-    this.passiveFishSpeedMultiplier = UpgradeFormula.passiveFishRate(passiveFishSpeedLevel);
-    this.passiveFishPerPull = UpgradeFormula.passiveFishAmount(passiveFishPerPullLevel);
-}
-public final void initUpgrades(){
-    upgrades.clear();
-    for (UpgradeType type : EnumSet.allOf(UpgradeType.class)) {
-        int startingLevel = 1;
-        upgrades.add(new Upgrade(type,startingLevel));
-    }
-}
-public int getLevelOf(UpgradeType type) {
-    return upgrades.stream().filter(upgrade -> upgrade.getType() == type)
-            .map(Upgrade::getLevel)
-            .findFirst()
-            .orElse(0);
-}
-
-public void increaseLevelOf(UpgradeType type) {
-    upgrades.stream()
-            .filter(upgrade -> upgrade.getType() == type)
-            .findFirst()
-            .ifPresent(upgrade -> upgrade.setLevel(upgrade.getLevel() + 1));
-    recalculateStats();
-}
-public long calculatePull(){
-    double pull = this.baseFishPull;
-    double roll = RNG.nextDouble() * 100;
-    boolean luckyPull = roll < this.luckRate;
-
-    if (luckyPull) {
-        pull = pull * this.luckMultiplier;
-
+        this.passiveFishSpeedMultiplier = UpgradeFormula.passiveFishRate(passiveFishSpeedLevel);
+        this.passiveFishPerPull = UpgradeFormula.passiveFishAmount(passiveFishPerPullLevel);
     }
 
-    pull = pull * this.masteryMultiplier;
-    long gainedFish = Math.max(1L,Math.round(pull));
-    return gainedFish;
-}
+    public long calculatePull() {
+        double pull = this.baseFishPull;
+        double roll = RNG.nextDouble() * 100;
+        boolean luckyPull = roll < this.luckRate;
 
-public void fishingAction(){
-    if (fishProgress == 10){
-        fishAmount = fishAmount + calculatePull();
-        fishProgress = 0;
-    } else {
-        fishProgress++;
+        if (luckyPull) {
+            pull = pull * this.luckMultiplier;
+        }
+
+        pull = pull * this.masteryMultiplier;
+        return Math.max(1L, Math.round(pull));
+    }
+
+    public void fishingAction() {
+        if (fishProgress == 10) {
+            fishAmount = fishAmount + calculatePull();
+            fishProgress = 0;
+        } else {
+            fishProgress++;
+        }
     }
 }
-
-
-}
-
