@@ -37,7 +37,7 @@ public class Fisher {
 
     private double passiveFishSpeedMultiplier;
     private double passiveFishPerPull;
-    private double lastPassiveTickMillis;
+    private long lastPassiveTickMillis;
 
     private int fishProgress;
 
@@ -154,4 +154,24 @@ public class Fisher {
             fishProgress++;
         }
     }
+
+    public void passiveFishingTick() {
+        long now = System.currentTimeMillis();
+        // Zeit seit letztem Tick
+        long elapsed = now - lastPassiveTickMillis;
+        // Dauer eines Ticks in Millisekunden
+        // Level 1  -> 30000ms  (1 Tick alle 30s)
+        // Level 100 -> 3000ms  (1 Tick alle 3s)
+        double tickDuration = passiveFishSpeedMultiplier;
+        // wie viele Ticks sind vergangen?
+        long ticks = (long)(elapsed / tickDuration);
+
+        if (ticks > 0) {
+            long gainedFish = (long)(ticks * passiveFishPerPull);
+            fishAmount += gainedFish;
+            // neuen Timestamp setzen
+            lastPassiveTickMillis += (long)(ticks * tickDuration);
+        }
+    }
+
 }
