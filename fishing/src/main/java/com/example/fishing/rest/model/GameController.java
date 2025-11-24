@@ -24,7 +24,7 @@ public class GameController {
     }
 
     // POST /api/game/{fisherId}/upgrade/{type}
-    @PostMapping("/{fisherId}/upgrade/{type}")
+    @PostMapping("/{fisherId}/upgrade/{type}/{fishAmount}")
     public Fisher buyUpgrade(@PathVariable long fisherId,
                              @PathVariable UpgradeType type,
                              @PathVariable long fishAmount) {
