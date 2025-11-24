@@ -95,19 +95,24 @@ public int getLevelOf(UpgradeType type) {
             .orElse(0);
 }
 
-
-public void increaseLevelOf(UpgradeType type) {
-    long rounded = Math.round(Math.pow(1.15, getLevelOf(type)));
-    long upgradeCost = 10 * rounded;
-    if (fishAmount >= upgradeCost) {
-        upgrades.stream()
-                .filter(upgrade -> upgrade.getType() == type)
-                .findFirst()
-                .ifPresent(upgrade -> upgrade.setLevel(upgrade.getLevel() + 1));
-        recalculateStats();
-        fishAmount -= upgradeCost;
+    public long getUpgradeCost(UpgradeType type) {
+        long rounded = Math.round(Math.pow(1.15, getLevelOf(type)));
+        long upgradeCost = 10 * rounded;
+        return upgradeCost;
     }
-}
+
+    public void increaseLevelOf(UpgradeType type) {
+        long upgradeCostAtm = getUpgradeCost(type);
+        if (fishAmount >= upgradeCostAtm) {
+            upgrades.stream()
+                    .filter(upgrade -> upgrade.getType() == type)
+                    .findFirst()
+                    .ifPresent(upgrade -> upgrade.setLevel(upgrade.getLevel() + 1));
+            recalculateStats();
+            fishAmount -= upgradeCostAtm;
+        }
+    }
+
 public long calculatePull(){
     double pull = this.baseFishPull;
     double roll = RNG.nextDouble() * 100;
