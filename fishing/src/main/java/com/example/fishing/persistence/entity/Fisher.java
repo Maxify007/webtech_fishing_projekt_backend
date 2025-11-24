@@ -88,6 +88,13 @@ public int getLevelOf(UpgradeType type) {
             .findFirst()
             .orElse(0);
 }
+    @PostLoad
+    private void onLoad() {
+        if (upgrades == null || upgrades.isEmpty()) {
+            initUpgrades();
+            recalculateStats();
+        }
+    }
 
 public void increaseLevelOf(UpgradeType type) {
     long rounded = Math.round(Math.pow(1.15, getLevelOf(type)));
@@ -124,6 +131,7 @@ public void fishingAction(){
         fishProgress++;
     }
 }
+
 
     public void passiveFishingTick() {
         long now = System.currentTimeMillis();

@@ -42,33 +42,4 @@ public class FisherController {
         }
         return fisher;
     }
-
-    @PostMapping("/{fisherId}/upgrade")
-    public Fisher upgrade(@PathVariable long fisherId,
-                          @RequestParam long playerId,
-                          @RequestParam UpgradeType type) {
-
-        Fisher fisher = getFisher(fisherId, playerId);
-        fisher.increaseLevelOf(type);
-        return fisherRepository.save(fisher);
-    }
-
-    @PostMapping("/{fisherId}/click")
-    public Fisher click(@PathVariable long fisherId,
-                        @RequestParam long playerId) {
-
-        Fisher fisher = getFisher(fisherId, playerId);
-        fisher.fishingAction();
-        return fisherRepository.save(fisher);
-    }
-
-    @PostMapping("/{fisherId}/passive")
-    public Fisher passive(@PathVariable long fisherId,
-                          @RequestParam long playerId) {
-
-        Fisher fisher = getFisher(fisherId, playerId);
-        fisher.passiveFishingTick(); // musst du evtl. noch hinzufügen
-        return fisherRepository.save(fisher);
-    }
-
 }
