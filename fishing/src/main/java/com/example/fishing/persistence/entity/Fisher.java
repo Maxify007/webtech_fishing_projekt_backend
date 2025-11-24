@@ -55,7 +55,13 @@ public Fisher(Long playerId,String name) {
     this.lastPassiveTickMillis = System.currentTimeMillis();
 }
     protected Fisher() {}
-
+    @PostLoad
+    private void onLoad() {
+        if (upgrades == null || upgrades.isEmpty()) {
+            initUpgrades();
+            recalculateStats();
+        }
+    }
 
     public void recalculateStats() {
     int clickFlatLevel = getLevelOf(UpgradeType.CLICK_FLAT);
@@ -88,13 +94,7 @@ public int getLevelOf(UpgradeType type) {
             .findFirst()
             .orElse(0);
 }
-    @PostLoad
-    private void onLoad() {
-        if (upgrades == null || upgrades.isEmpty()) {
-            initUpgrades();
-            recalculateStats();
-        }
-    }
+
 
 public void increaseLevelOf(UpgradeType type) {
     long rounded = Math.round(Math.pow(1.15, getLevelOf(type)));
