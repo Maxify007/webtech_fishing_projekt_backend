@@ -51,9 +51,9 @@ public class GameController {
 
     // POST /api/game/{fisherId}/passive
     @PostMapping("/{fisherId}/passive")
-    public Map<String, Object> passiveTick(@PathVariable long fisherId) {
-        Fisher fisher = gameEngine.passiveTick(fisherId);
-        return buildFisherResponse(fisher);
+    public Fisher passiveTick(@PathVariable long fisherId) {
+        return gameEngine.passiveTick(fisherId);
     }
+
 
 }
