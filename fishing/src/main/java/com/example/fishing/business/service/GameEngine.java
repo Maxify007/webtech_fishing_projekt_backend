@@ -20,15 +20,16 @@ public class GameEngine {
         return fisher;
     }
 
-    public Fisher buyUpgrade(long fisherId, UpgradeType upgradeType, long fishAmount) {
-        Fisher fisher = fisherRepository.findById(fisherId).orElseThrow(() -> new IllegalArgumentException("Fisher not found"));
-        if(fishAmount >= fisher.getUpgradeCost(upgradeType)) {
-            fisher.increaseLevelOf(upgradeType);
-            fisher.decreaseFishAmount(fisher.getUpgradeCost(upgradeType));
-            fisherRepository.save(fisher);
-        }
+    public Fisher buyUpgrade(long fisherId, UpgradeType upgradeType) {
+        Fisher fisher = fisherRepository.findById(fisherId)
+                .orElseThrow(() -> new IllegalArgumentException("Fisher not found"));
+
+        fisher.increaseLevelOf(upgradeType); // this method does the cost check using fisher.fishAmount
+        fisherRepository.save(fisher);
+
         return fisher;
     }
+
 
     public Fisher passiveTick(long fisherId) {
         Fisher fisher = fisherRepository.findById(fisherId)

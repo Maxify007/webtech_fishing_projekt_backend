@@ -76,10 +76,7 @@ public class Fisher {
 
     protected Fisher() {}
 
-    /**
-     * For OLD fishers already stored before this change:
-     * When JPA loads them and upgradeLevels is empty, seed defaults.
-     */
+
     @PostLoad
     private void onLoad() {
         if (upgradeLevels == null || upgradeLevels.isEmpty()) {
@@ -95,10 +92,6 @@ public class Fisher {
         }
     }
 
-    /**
-     * Keep frontend contract: return List<Upgrade> even though we store a Map.
-     * This is NOT persisted; it's derived from upgradeLevels.
-     */
     @Transient
     public List<Upgrade> getUpgrades() {
         List<Upgrade> list = new ArrayList<>();
@@ -108,25 +101,30 @@ public class Fisher {
         return list;
     }
 
+
+
+
     public int getLevelOf(UpgradeType type) {
         return upgradeLevels.getOrDefault(type, 0);
     }
 
-    public void decreaseFishAmount(long subtractAmount) {
-        fishAmount -= subtractAmount;
+
+    public long getUpgradeCost(UpgradeType type) {
+        int level = getLevelOf(type);
+        long rounded = Math.round(Math.pow(1.15, level));
+        return 10 * rounded;
     }
 
     public void increaseLevelOf(UpgradeType type) {
-        // (you removed cost checks earlier; keeping your current logic)
-        upgradeLevels.put(type, getLevelOf(type) + 1);
-        recalculateStats();
+        long upgradeCost = getUpgradeCost(type);
+
+        if (fishAmount >= upgradeCost) {
+            upgradeLevels.put(type, getLevelOf(type) + 1);
+            fishAmount -= upgradeCost;
+            recalculateStats();
+        }
     }
 
-    public long getUpgradeCost(UpgradeType type) {
-        long rounded = Math.round(Math.pow(1.15, getLevelOf(type)));
-        long upgradeCost = 10 * rounded;
-        return upgradeCost;
-    }
 
     public void recalculateStats() {
         int clickFlatLevel = getLevelOf(UpgradeType.CLICK_FLAT);

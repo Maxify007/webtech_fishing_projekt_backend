@@ -24,12 +24,12 @@ public class GameController {
     }
 
     // POST /api/game/{fisherId}/upgrade/{type}
-    @PostMapping("/{fisherId}/upgrade/{type}/{fishAmount}")
+    @PostMapping("/{fisherId}/upgrade/{type}")
     public Fisher buyUpgrade(@PathVariable long fisherId,
-                             @PathVariable UpgradeType type,
-                             @PathVariable long fishAmount) {
-        return gameEngine.buyUpgrade(fisherId, type, fishAmount);
+                             @PathVariable UpgradeType type) {
+        return gameEngine.buyUpgrade(fisherId, type);
     }
+
 
     private Map<String, Object> buildFisherResponse(Fisher fisher) {
         Map<String, Object> response = new java.util.LinkedHashMap<>();
