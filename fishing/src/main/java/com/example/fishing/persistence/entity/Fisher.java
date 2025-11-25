@@ -67,7 +67,7 @@ public class Fisher {
         this.playerId = playerId;
         this.name = name;
         this.fishAmount = 0;
-        this.fishProgress = 0;
+        this.fishProgress = 1;
         this.lastPassiveTickMillis = System.currentTimeMillis();
 
         initUpgradeLevels();   // <-- initialize persisted levels
@@ -159,7 +159,7 @@ public class Fisher {
     public void fishingAction() {
         if (fishProgress == 10) {
             fishAmount = fishAmount + calculatePull();
-            fishProgress = 0;
+            fishProgress = 1;
         } else {
             fishProgress++;
         }
