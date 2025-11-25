@@ -24,11 +24,21 @@ public class GameEngine {
         Fisher fisher = fisherRepository.findById(fisherId)
                 .orElseThrow(() -> new IllegalArgumentException("Fisher not found"));
 
-        fisher.increaseLevelOf(upgradeType); // this method does the cost check using fisher.fishAmount
-        fisherRepository.save(fisher);
+        int before = fisher.getLevelOf(upgradeType);
+
+        // this method already checks cost & fishAmount
+        fisher.increaseLevelOf(upgradeType);
+
+        int after = fisher.getLevelOf(upgradeType);
+
+        // nur speichern, wenn sich etwas geändert hat
+        if (after > before) {
+            fisherRepository.save(fisher);
+        }
 
         return fisher;
     }
+
 
 
     public Fisher passiveTick(long fisherId) {

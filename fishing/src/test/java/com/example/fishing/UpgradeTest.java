@@ -28,7 +28,8 @@ public class UpgradeTest {
         Mockito.when(fisherRepository.findById(1L))
                 .thenReturn(java.util.Optional.of(fisher));
 
-        Fisher result = gameEngine.buyUpgrade(1L, UpgradeType.CLICK_FLAT, fisher.getFishAmount());
+        // neue Signatur: kein fishAmount mehr übergeben
+        Fisher result = gameEngine.buyUpgrade(1L, UpgradeType.CLICK_FLAT);
 
         assertEquals(initialLevel + 1, result.getLevelOf(UpgradeType.CLICK_FLAT));
         assertEquals(100 - cost, result.getFishAmount());
@@ -48,7 +49,8 @@ public class UpgradeTest {
         Mockito.when(fisherRepository.findById(1L))
                 .thenReturn(java.util.Optional.of(fisher));
 
-        Fisher result = gameEngine.buyUpgrade(1L, UpgradeType.CLICK_FLAT, fisher.getFishAmount());
+        // neue Signatur: kein fishAmount mehr übergeben
+        Fisher result = gameEngine.buyUpgrade(1L, UpgradeType.CLICK_FLAT);
 
         // Level soll gleich bleiben
         assertEquals(initialLevel, result.getLevelOf(UpgradeType.CLICK_FLAT));
@@ -84,7 +86,7 @@ public class UpgradeTest {
         fisher.setFishAmount(upgradeCost); // genug Fisch für Upgrade
 
         // ---- 2) Upgrade kaufen ----
-        gameEngine.buyUpgrade(1L, UpgradeType.CLICK_FLAT, fisher.getFishAmount());
+        gameEngine.buyUpgrade(1L, UpgradeType.CLICK_FLAT);
         assertEquals(2, fisher.getLevelOf(UpgradeType.CLICK_FLAT));
 
         // ---- 3) Wieder klicken bis neuer Fisch entsteht ----
