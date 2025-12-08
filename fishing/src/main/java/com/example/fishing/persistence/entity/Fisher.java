@@ -111,8 +111,8 @@ public class Fisher {
 
     public long getUpgradeCost(UpgradeType type) {
         int level = getLevelOf(type);
-        long rounded = Math.round(Math.pow(1.15, level));
-        return 10 * rounded;
+        long rounded = Math.round(Math.pow(1.15, level) * 10);
+        return rounded;
     }
 
     public void increaseLevelOf(UpgradeType type) {
