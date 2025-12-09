@@ -30,6 +30,7 @@ public class FisherController {
         return fisherRepository.save(fisher);
     }
 
+
     // GET /api/fishers/{fisherId}?playerId=1
     @GetMapping("/{fisherId}")
     public Fisher getFisher(@PathVariable long fisherId,
@@ -42,4 +43,20 @@ public class FisherController {
         }
         return fisher;
     }
+
+    @DeleteMapping("/{fisherId}")
+    public void deleteFisher(@PathVariable long fisherId,
+                             @RequestParam long playerId) {
+
+        Fisher fisher = fisherRepository.findById(fisherId)
+                .orElseThrow(() -> new IllegalArgumentException("Fisher not found"));
+
+        // Sicherheits-Check: gehört der Fisher wirklich dem Player?
+        if (fisher.getPlayerId() != playerId) {
+            throw new IllegalStateException("Not your Fisher");
+        }
+
+        fisherRepository.delete(fisher);
+    }
+
 }

@@ -28,7 +28,7 @@ public class Fisher {
 
     private Long playerId;
     private String name;
-
+    private long totalFishAmount;
     private long fishAmount;
     private long baseFishPull;
 
@@ -69,7 +69,7 @@ public class Fisher {
         this.fishAmount = 0;
         this.fishProgress = 1;
         this.lastPassiveTickMillis = System.currentTimeMillis();
-
+        this.totalFishAmount = 0;
         initUpgradeLevels();   // <-- initialize persisted levels
         recalculateStats();
     }
@@ -91,18 +91,6 @@ public class Fisher {
             upgradeLevels.put(type, 1);
         }
     }
-
-    @Transient
-    public List<Upgrade> getUpgrades() {
-        List<Upgrade> list = new ArrayList<>();
-        for (Map.Entry<UpgradeType, Integer> e : upgradeLevels.entrySet()) {
-            list.add(new Upgrade(e.getKey(), e.getValue()));
-        }
-        return list;
-    }
-
-
-
 
     public int getLevelOf(UpgradeType type) {
         return upgradeLevels.getOrDefault(type, 0);
@@ -159,6 +147,7 @@ public class Fisher {
     public void fishingAction() {
         if (fishProgress == 10) {
             fishAmount = fishAmount + calculatePull();
+            totalFishAmount = totalFishAmount + calculatePull();
             fishProgress = 1;
         } else {
             fishProgress++;
@@ -179,6 +168,7 @@ public class Fisher {
         if (ticks > 0) {
             long gainedFish = (long)(ticks * passiveFishPerPull);
             fishAmount += gainedFish;
+            totalFishAmount += gainedFish;
             // neuen Timestamp setzen
             lastPassiveTickMillis += (long)(ticks * tickDuration);
         }
