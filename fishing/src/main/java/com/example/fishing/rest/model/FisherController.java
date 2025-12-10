@@ -30,10 +30,6 @@ public class FisherController {
         return fisherRepository.save(fisher);
     }
 
-    @GetMapping("/leaderboard")
-    public List<Fisher> leaderboard() {
-        return fisherRepository.findTop10ByOrderByTotalFishAmountDesc();
-    }
     // GET /api/fishers/{fisherId}?playerId=1
     @GetMapping("/{fisherId}")
     public Fisher getFisher(@PathVariable long fisherId,
