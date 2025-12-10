@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface FisherRepository extends JpaRepository<Fisher, Long> {
     List<Fisher> findByPlayerId(Long playerId);
+    List<Fisher> findTop10ByOrderByTotalFishAmountDesc();
 }
