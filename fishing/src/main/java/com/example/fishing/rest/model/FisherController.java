@@ -49,8 +49,6 @@ public class FisherController {
 
         Fisher fisher = fisherRepository.findById(fisherId)
                 .orElseThrow(() -> new IllegalArgumentException("Fisher not found"));
-
-        // Sicherheits-Check: gehört der Fisher wirklich dem Player?
         if (fisher.getPlayerId() != playerId) {
             throw new IllegalStateException("Not your Fisher");
         }
